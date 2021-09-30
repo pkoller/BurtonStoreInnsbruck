@@ -28,6 +28,9 @@ void draw() {
   //ellipse(centerOfMountain.x, centerOfMountain.y, 10, 10);
 
   PVector previous = new PVector(0, 0);
+  PVector originalPrevious = new PVector(0, 0);
+  PVector originalNext = new PVector(0, 0);
+  
   PVector act = new PVector(0, 0);
 
   PShape child = burton.getChild(3);
@@ -38,14 +41,21 @@ void draw() {
     for (int i=0; i<50; i++)
     {
       previous = child.getVertex(0);
-      for (int j = 0; j < total; j++) 
+      for (int j = 1; j < total; j++) 
       {
+        originalPrevious = child.getVertex(j-1);
+        originalNext = child.getVertex((j+1)%total);
         act = child.getVertex(j);
-        // Cycling brightness for each vertex
+        
         stroke(0);//(frameCount*10 + j) % 255*(i+1));
-        // Just a dot for each one
+        // Just a dot for each one  
         //stroke(0);
-        //point(v.x, v.y);
+       
+        PVector oldLine = PVector.sub(act,originalPrevious);
+        PVector nextLine = PVector.sub(originalNext, act);
+        
+        float angle = PVector.dot(oldLine, nextLine);
+          
         PVector mouse = new PVector(mouseX, mouseY);
         PVector direction = PVector.sub(act, mouse);
         direction.normalize();
